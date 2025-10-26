@@ -1,0 +1,34 @@
+services:
+  servicea:
+    build:
+      context: ./service_a
+    container_name: servicea
+    environment:
+      URL_SERVICE_B: http://serviceb:8081
+      URL_ZIPKIN: http://zipkin:9411
+    ports:
+      - "8080:8080"
+
+  serviceb:
+    build:
+      context: ./service_b
+    container_name: serviceb
+    environment:
+      URL_ZIPKIN: http://zipkin:9411
+    ports:
+      - "8081:8081"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+  otel_collector:
+    image: otel/opentelemetry-collector:latest
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./.docker/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
