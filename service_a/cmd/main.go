@@ -85,7 +85,7 @@ func getWeather(w http.ResponseWriter, r *http.Request) {
 }
 
 func validateCEP(cep entities.CEP) error {
-	var validCEP = regexp.MustCompile(`^\d{5}-?\d{3}$`)
+	var validCEP = regexp.MustCompile(`^\d{8}$`)
 	if !validCEP.MatchString(cep.Cep) {
 		return config.ErrZipCodeInvalido
 	}

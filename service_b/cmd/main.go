@@ -101,7 +101,7 @@ func getWeather(w http.ResponseWriter, r *http.Request) {
 }
 
 func validateCEP(cep entities.CEP) error {
-	var validCEP = regexp.MustCompile(`^\d{5}-?\d{3}$`)
+	var validCEP = regexp.MustCompile(`^\d{8}$`)
 	if !validCEP.MatchString(cep.CEP) {
 		return config.ErrZipCodeInvalido
 	}
@@ -139,7 +139,7 @@ func fetchWeather(ctx context.Context, city string) (*dto.ResponseWeatherDTO, er
 	ctx, span := tracer.Start(ctx, "request-weather-api")
 	defer span.End()
 
-	weatherUrl := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", "3841b81037a5427eb51191826241702", url.QueryEscape(city))
+	weatherUrl := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", cfg.WeatherAPIKey, url.QueryEscape(city))
 	req, err := http.NewRequestWithContext(ctx, "GET", weatherUrl, nil)
 	if err != nil {
 		return nil, err

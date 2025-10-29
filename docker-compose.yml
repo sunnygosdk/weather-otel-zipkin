@@ -15,6 +15,7 @@ services:
     container_name: serviceb
     environment:
       URL_ZIPKIN: http://zipkin:9411
+      WEATHER_API_KEY: "SUA_API_KEY"
     ports:
       - "8081:8081"
 
